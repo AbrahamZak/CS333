@@ -19,12 +19,8 @@ int main(int argc, const char * argv[]) {
     printf("Please input two numbers.\n");
     fflush(stdout);
     
-    //Create a char array for user input
-    char input [20];
-    fgets(input, 20, stdin);
-    
     //Take the two number inputs and assigns them to number and radix
-    sscanf (input, "%d%d", &number, &radix);
+    scanf ("%d%d", &number, &radix);
     
     //Counter for how many times we are dividing the number by the radix
     char count = 0;
