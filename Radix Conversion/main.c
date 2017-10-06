@@ -4,9 +4,9 @@
 */
 
 //  Abraham Zakharov
-//  Unix Login ID:
-//  Lab Instructor:
-//  Lab: Friday @
+//  Unix Login ID: ay451227
+//  Lab Instructor: Areeb Khan
+//  Lab: Friday @ 1:40PM - 2:35PM
 
 #include <stdio.h>
 
@@ -29,7 +29,7 @@ int main(int argc, const char * argv[]) {
     //A character array for the result
     char result [50];
     
-    //A while loop until our number reaches 0
+    //A while loop until our first number reaches 0
     while (number != 0){
         /*We take the modulus (remainder) and put it into our result array in terms of our base characters, then we divide the number by the radix, and increment the count by one*/
         result[count] = baseChars[number%radix];
@@ -40,21 +40,15 @@ int main(int argc, const char * argv[]) {
         count ++;
     }
     
-    /*Once we have our results we need to reverse it. So, we create a new char array in the size of
-    our count minus 1, and we create an int i to count the transfer places in the new array*/
-    char resultReversed [count-1];
-    int i = 0;
-    //We loop in the amount of our count so all data is copied from our result array into our reverse result array
-    while (count >= 0){
-        resultReversed[i] = result[count];
-        //Every time we copy data we decrement count by 1 and increment i by 1
-        count --;
-        i++;
+    //Print the result reversed to get our final answer
+    printf("Result: ");
+    while (count!=-1){
+        printf("%c", result[count]);
+        count--;
     }
+    printf("\n");
     
-    //Print the result
-    printf("Result: %s \n", resultReversed);
-    fflush(stdout);
+   
     
     return 0;
 }
