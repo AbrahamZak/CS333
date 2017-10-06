@@ -22,6 +22,27 @@ int main(int argc, const char * argv[]) {
     //Take the two number inputs and assigns them to number and radix
     scanf ("%d%d", &number, &radix);
     
+     //If 0 is chosen as radix, we cannot express a base 0
+    if (radix == 0){
+        printf("Result: Cannot express base 0\n");
+        fflush(stdout);
+        return 0;
+    }
+    
+    //If 1 is chosen as radix, we cannot express a base 1
+    if (radix == 1){
+        printf("Result: Cannot express base 1\n");
+        fflush(stdout);
+        return 0;
+    }
+    
+    //If 0 is chosen as number, the result is always 0
+    if (number == 0){
+        printf("Result: 0\n");
+        fflush(stdout);
+        return 0;
+    }
+    
     //Counter for how many times we are dividing the number by the radix
     char count = 0;
     //A set of base characters because we cannot use numbers past 9 so we use letters to substitute
