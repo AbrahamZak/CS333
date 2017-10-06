@@ -42,12 +42,14 @@ int main(int argc, const char * argv[]) {
     
     //Print the result reversed to get our final answer
     printf("Result: ");
+    fflush(stdout);
     while (count!=-1){
         printf("%c", result[count]);
+        fflush(stdout);
         count--;
     }
     printf("\n");
-    
+    fflush(stdout);
    
     
     return 0;
