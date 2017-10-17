@@ -1,6 +1,10 @@
 /*
- Program that takes in an input txt file and reverses each line
- by word and places the result into an output txt file
+ This is a simple C program that takes in an input text file
+ and reverses the order of the words in each line. It also
+ removes any excess tabs and spaces from the original input file,
+ leaving one space between each word. The program then writes
+ the result into an output file. Both the input file and output
+ file are specified by the user as arguments.
  */
 
 //  Abraham Zakharov
