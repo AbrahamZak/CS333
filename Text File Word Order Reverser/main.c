@@ -1,6 +1,11 @@
 /*
- Program that takes in an input txt file and reverses each line
- by word and places the result into an output txt file
+ This is a simple C program that takes in an input text file
+ and reverses the order of the words in each line. It also
+ removes any excess tabs and spaces from the original input file,
+ leaving one space between each word. The program then writes
+ the result into an output file. Both the input file and output
+ file are specified by the user as arguments.
+
  */
 
 //  Abraham Zakharov
@@ -26,6 +31,7 @@ int main(int argc, const char * argv[]) {
     //Check for if the correct number of arguments were inputted
     if (argc != NUMARG) {
         printf("Usage: findpath infile outfile\n");
+        fflush(stdout);
         return 0;
     }
     
@@ -42,6 +48,7 @@ int main(int argc, const char * argv[]) {
     if ((infile = fopen(inputFile, "r")) == NULL) {
         //If it fails, let the user know
         printf("Could not open file %s for reading.\n", argv[IN_FILE_ARG]);
+        fflush(stdout);
         return 0;
     }
     
@@ -49,6 +56,7 @@ int main(int argc, const char * argv[]) {
     if ((outfile = fopen(outputFile, "w")) == NULL) {
         //If it fails, let the user know
         printf("Could not open file %s for writing.\n", argv[OUT_FILE_ARG]);
+        fflush(stdout);
         return 0;
     }
     
@@ -60,10 +68,9 @@ int main(int argc, const char * argv[]) {
     
     //We begin by taking an input line by line
     while (fgets(line, MAXLEN, infile) != NULL) {
+        
         //Remove the newline character from the input line
         strtok(line, "\n");
-        
-         printf("%s\n", line);
         
         /*First, we reverse the entire line
          For example the line: Here's     Johnny
@@ -78,13 +85,13 @@ int main(int argc, const char * argv[]) {
             endOfLine--;
             }
         reversedLine[index] = '\0';
-        printf("%s\n", reversedLine);
         
         /*We then remove an excess spaces from the line
          For example the line: ynnoJ      s'ereH
                       becomes: ynnoJ s'ereH
          
          Here, we also convert all \t (tabs) in our original input into spaces
+         while also converting all extra spaces into a single space
          */
         char reversedLineNoExtraSpaces [MAXLEN];
         int originalPosition = 0;
@@ -109,7 +116,7 @@ int main(int argc, const char * argv[]) {
         reversedLineNoExtraSpaces[extraSpaceRemovePosition] = '\0';
         
         /* We do what we just did one more time in order to remove excess spaces
-         created by the tabs that we converted.
+         created by the tabs that we converted
          */
         char reversedLineNoExtraSpacesFromTabs [MAXLEN];
         originalPosition = 0;
@@ -124,9 +131,7 @@ int main(int argc, const char * argv[]) {
                 extraSpaceRemovePosition++;
             }
         }
-        
         reversedLineNoExtraSpacesFromTabs[extraSpaceRemovePosition] = '\0';
-        printf("%s\n", reversedLineNoExtraSpacesFromTabs);
         
         /* Now, we can finally reverse each word individually to get our final result
          For example the line: ynnoJ s'ereH
@@ -159,9 +164,7 @@ int main(int argc, const char * argv[]) {
         
         finalResult[finalPosition] = '\n';
         finalResult[finalPosition+1] = '\0';
-        
-        printf("%s\n", finalResult);
-        
+
         //When finished reversing each word, we put the line into our output file
         fputs(finalResult,outfile);
         
