@@ -47,7 +47,7 @@ int main(int argc, const char * argv[]) {
     //Open the input file
     if ((infile = fopen(inputFile, "r")) == NULL) {
         //If it fails, let the user know
-        printf("Could not open file %s for reading.\n", argv[IN_FILE_ARG]);
+        printf("Could not open file %s.txt for reading.\n", argv[IN_FILE_ARG]);
         fflush(stdout);
         return 0;
     }
@@ -55,7 +55,7 @@ int main(int argc, const char * argv[]) {
     //Create the output file
     if ((outfile = fopen(outputFile, "w")) == NULL) {
         //If it fails, let the user know
-        printf("Could not open file %s for writing.\n", argv[OUT_FILE_ARG]);
+        printf("Could not open file %s.txt for writing.\n", argv[OUT_FILE_ARG]);
         fflush(stdout);
         return 0;
     }
@@ -175,7 +175,7 @@ int main(int argc, const char * argv[]) {
     fclose(infile);
     fclose(outfile);
     
-    printf ("Finished\n");
+    printf ("Finished.\n");
     fflush(stdout);
     
     return 0;
