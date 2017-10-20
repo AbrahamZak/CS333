@@ -71,10 +71,9 @@ int main(int argc, const char * argv[]) {
         
         //Remove the newline character from the input line
         strtok(line, "\n");
-        
         /*First, we reverse the entire line
          For example the line: Here's     Johnny
-                  will become: ynnoJ      s'ereH
+                  will become: ynnhoJ      s'ereH
          */
         int index = 0;
         long endOfLine = strlen(line)-1;
@@ -87,8 +86,8 @@ int main(int argc, const char * argv[]) {
         reversedLine[index] = '\0';
         
         /*We then remove an excess spaces from the line
-         For example the line: ynnoJ      s'ereH
-                      becomes: ynnoJ s'ereH
+         For example the line: ynnhoJ      s'ereH
+                      becomes: ynnhoJ s'ereH
          
          Here, we also convert all \t (tabs) in our original input into spaces
          while also converting all extra spaces into a single space
@@ -134,8 +133,8 @@ int main(int argc, const char * argv[]) {
         reversedLineNoExtraSpacesFromTabs[extraSpaceRemovePosition] = '\0';
         
         /* Now, we can finally reverse each word individually to get our final result
-         For example the line: ynnoJ s'ereH
-                      becomes: Jonny Here's
+         For example the line: ynnhoJ s'ereH
+                      becomes: Johnny Here's
          */
         char finalResult [MAXLEN];
         int startWord = 0;
@@ -161,10 +160,9 @@ int main(int argc, const char * argv[]) {
                 endWord++;
             }
         }
-        
         finalResult[finalPosition] = '\n';
         finalResult[finalPosition+1] = '\0';
-
+        
         //When finished reversing each word, we put the line into our output file
         fputs(finalResult,outfile);
         
