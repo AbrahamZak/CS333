@@ -138,7 +138,35 @@ int ina (int num, char str[]){
     }
     //If the index provided is within range we insert the new node after that index
     else{
+        //Make a node with data
+        struct node *insert = (struct node*) malloc(sizeof(struct node));
+        insert->index = num+1;
+        strcpy(insert->text, str);
         
+        //Traverse the list
+        struct node *ptr = head;
+        int i=1;
+        while (i<num){
+            ptr = ptr->next;
+            i++;
+        }
+        //Make a node for the next element
+        struct node *postptr = ptr->next;
+        
+        /*Make our index->next point to the node we are inserting
+         Then make insert->next point to the node that originally went after
+         */
+        ptr->next = insert;
+        insert->next = postptr;
+        
+        //Increment size
+        size++;
+        
+        //Reorder our index numbers across the list
+        reorder();
+        
+        printf("Ok\n");
+        fflush(stdout);
     }
     return 0;
 }
@@ -200,14 +228,74 @@ int inb (int num, char str[]){
     }
     //If the index provided is within range we insert the new node before that index
     else{
+        //Make a node with data
+        struct node *insert = (struct node*) malloc(sizeof(struct node));
+        insert->index = num-1;
+        strcpy(insert->text, str);
         
+        //Traverse the list to reach the element before our index
+        struct node *preptr = head;
+        int i=1;
+        while (i<num-1){
+            preptr = preptr->next;
+            i++;
+        }
+        
+        //Make a node for the next element, the index
+        struct node *ptr = preptr->next;
+        
+        /*Make our preindex->next point to the node we are inserting
+         Then make insert->next point to the index
+         */
+        preptr->next = insert;
+        insert->next = ptr;
+        
+        //Increment size
+        size++;
+        
+        //Reorder our index numbers across the list
+        reorder();
+        
+        printf("Ok\n");
+        fflush(stdout);
     }
     return 0;
 }
 
 //Function to delete a node at the specified index
 int del (int num){
-    printf("del: %d \n", num);
+    //If the replacement index is not on the list, tell user there is no such index
+    if (num>size){
+        printf("No such index\n");
+        fflush(stdout);
+        return 0;
+    }
+    else{
+        //Traverse the list to reach the element before our index
+        struct node *preptr = head;
+        int i=1;
+        while (i<num-1){
+            preptr = preptr->next;
+            i++;
+        }
+        //If there is an element after our index we put it in postptr
+        if (preptr->next->next!=NULL){
+        struct node *postptr = preptr->next->next;
+            //Delete the element by setting the pre->next to the post
+            preptr->next = postptr;
+        }
+        //If there is no element after the index, we set preptr->next to NULL
+        preptr->next = NULL;
+        
+        //Decrement size
+        size--;
+        
+        //Reorder our index numbers across the list
+        reorder();
+        
+        printf("Deleted\n");
+        fflush(stdout);
+    }
     return 0;
 }
 
