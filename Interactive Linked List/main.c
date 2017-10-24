@@ -27,6 +27,11 @@ int rep (int num, char str[]);
 int prn (void);
 int end (void);
 
+//Function to check if there exists a node with the same string we are trying to insert
+int check (char str[]);
+//Updates the index numbers to reflect actual position on the list
+int reorder (void);
+
 /* Struct for each node in the linked list. */
 struct node {
     int index;
@@ -34,9 +39,16 @@ struct node {
     struct node *next;
 };
 
+//Our head node
+struct node *head = NULL;
+
+//The size of our linked list
+int size = 0;
+
 /* Our main method will constantly run until the 'end' command.
  */
 int main(int argc, const char * argv[]) {
+    //This node is our head
     while (1) {
         printf("Command? ");
         fflush(stdout);
@@ -70,13 +82,126 @@ int main(int argc, const char * argv[]) {
 
 //Function to insert a node after the specified node at index num
 int ina (int num, char str[]){
-    printf("ina: %d %s\n", num, str);
+    //If this is the first node insert it at the head
+    if (size==0){
+        //create a begin node
+        struct node *begin = (struct node*) malloc(sizeof(struct node));
+        
+        begin->index = 1;
+        strcpy(begin->text, str);
+        
+        //point it to the head
+        begin->next = head;
+        
+        //point the head to begin
+        head = begin;
+        
+        //Increment size
+        size++;
+        
+        printf("Text inserted at the beginning\n");
+        fflush(stdout);
+        
+        return 0;
+    }
+    
+    //Check if the string is already in our list
+    if (check(str)==1){
+        printf("Such text exists already\n");
+        fflush(stdout);
+        return 0;
+    }
+    
+    //If the index provided is greater than the length of the list, insert the node at the end
+    else if (num>size){
+        int i = 1;
+        struct node *ptr = head;
+        //Traverse the list to the end
+        while(i!=size) {
+            ptr = ptr->next;
+            i++;
+        }
+        
+        //Make a node with data
+        struct node *insert = (struct node*) malloc(sizeof(struct node));
+        insert->index = size + 1;
+        strcpy(insert->text, str);
+        
+        //Add the node
+        ptr->next=insert;
+        
+        //Increment size
+        size++;
+        
+        printf("Text inserted at the end\n");
+        fflush(stdout);
+    }
+    //If the index provided is within range we insert the new node after that index
+    else{
+        
+    }
     return 0;
 }
 
 //Function to insert a node before the specified node at index num
 int inb (int num, char str[]){
-    printf("inb: %d %s\n", num, str);
+    //If this is the first node insert it at the head
+    if (size==0){
+        //create a begin node
+        struct node *begin = (struct node*) malloc(sizeof(struct node));
+        
+        begin->index = 1;
+        strcpy(begin->text, str);
+        
+        //point it to the head
+        begin->next = head;
+        
+        //point the head to begin
+        head = begin;
+        
+        //Increment size
+        size++;
+        
+        printf("Text inserted at the beginning\n");
+        fflush(stdout);
+        
+        return 0;
+    }
+    
+    //Check if the string is already in our list
+    if (check(str)==1){
+        printf("Such text exists already\n");
+        fflush(stdout);
+        return 0;
+    }
+    
+    //If the index provided is greater than the length of the list, insert the node at the beginning
+    else if (num>size){
+        
+        //Make a node with data
+        struct node *insert = (struct node*) malloc(sizeof(struct node));
+        insert->index = 1;
+        strcpy(insert->text, str);
+        
+        //point next to the old head
+        insert->next = head;
+        
+        //point the head to this node
+        head = insert;
+        
+        //Increment size
+        size++;
+        
+        //Reorder our index numbers across the list
+        reorder();
+        
+        printf("Text inserted at the beginning\n");
+        fflush(stdout);
+    }
+    //If the index provided is within range we insert the new node before that index
+    else{
+        
+    }
     return 0;
 }
 
@@ -88,19 +213,79 @@ int del (int num){
 
 //Function to replace the node at the specified index
 int rep (int num, char str[]){
-    printf("rep: %d %s\n", num, str);
+    //If the replacement index is not on the list, tell user there is no such index
+    if (num>size){
+        printf("No such index\n");
+        fflush(stdout);
+        return 0;
+    }
+    //Otherwise traverse the list until we reach the desired index
+    else{
+        struct node *ptr = head;
+        int i=1;
+        while (i<num){
+            ptr = ptr->next;
+            i++;
+        }
+        //Replace the text at the index with the new text
+        strcpy(ptr->text, str);
+        printf("Replaced\n");
+        fflush(stdout);
+    }
     return 0;
 }
 
 //Function to print the list
 int prn (){
-    printf("prn\n");
+    if (size==0){
+        printf("The list is empty\n");
+        fflush(stdout);
+    }
+    
+    struct node *ptr = head;
+    int i = 1;
+    //start from the beginning and traverse the list unril reaching hitting a NULL node (the end)
+    while(i!=size+1) {
+        printf("%d: %s\n",ptr->index,ptr->text);
+        fflush(stdout);
+        ptr = ptr->next;
+        i++;
+    }
+    return 0;
+}
+
+//Updates the index numbers to reflect actual position on the list
+int reorder(){
+    int i = 1;
+    struct node *ptr = head;
+    //Traverse the list to the end
+    while(i!=size+1) {
+        ptr->index = i;
+        i++;
+        ptr = ptr->next;
+    }
+    return 0;
+}
+
+//Function to check if there exists a node with the same string we are trying to insert
+int check (char str[]){
+    int i = 1;
+    struct node *ptr = head;
+    //Traverse the list to the end
+    while(i!=size+1) {
+        //If there is a match we return 1
+        if (strcmp(str, ptr->text) == 0){
+            return 1;
+        }
+        ptr = ptr->next;
+        i++;
+    }
+    //Otherwise we return 0
     return 0;
 }
 
 //Function to end the program
 int end (){
-    printf("end\n");
     exit(0);
     return 0;
 }
