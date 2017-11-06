@@ -226,6 +226,30 @@ int inb (int num, char str[]){
         printf("Text inserted at the beginning\n");
         fflush(stdout);
     }
+    //Special case for a new head
+    else if (num==1){
+        //Make a node with data
+        struct node *insert = (struct node*) malloc(sizeof(struct node));
+        insert->index = num-1;
+        strcpy(insert->text, str);
+        
+        //Make the next of our new node point to the head
+        struct node *tmp = head;
+        head = insert;
+        head->next = tmp;
+        
+        //Increment size
+        size++;
+        
+        //Reorder our index numbers across the list
+        reorder();
+        
+        printf("Ok\n");
+        fflush(stdout);
+        
+        return 0;
+        
+    }
     //If the index provided is within range we insert the new node before that index
     else{
         //Make a node with data
