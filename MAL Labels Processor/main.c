@@ -27,6 +27,8 @@ int flagb (char inputFile[], char outputFile[]);
 #define OUT_FILE_ARG 3
 #define NUMARG 4
 
+#define MAXLEN 80
+
 int main(int argc, const char * argv[]) {
     //Check for if the correct number of arguments were inputted
     if (argc != NUMARG) {
@@ -85,6 +87,14 @@ int flagv (char inputFile[], char outputFile[]){
         return 0;
     }
     
+    //A string that will store each line we read from the input file
+    char line [MAXLEN];
+    
+    //Get each line of the MAL program and process them until we reach the end
+    while (fgets(line, MAXLEN, infile) != NULL) {
+        
+    }
+    
     //Now that we are done, we can close both files
     fclose(infile);
     fclose(outfile);
@@ -113,6 +123,14 @@ int flagf (char inputFile[], char outputFile[]){
         return 0;
     }
     
+    //A string that will store each line we read from the input file
+    char line [MAXLEN];
+    
+    //Get each line of the MAL program and process them until we reach the end
+    while (fgets(line, MAXLEN, infile) != NULL) {
+        
+    }
+    
     //Now that we are done, we can close both files
     fclose(infile);
     fclose(outfile);
@@ -138,6 +156,14 @@ int flagb (char inputFile[], char outputFile[]){
         printf("Could not open file %s for writing.\n", outputFile);
         fflush(stdout);
         return 0;
+    }
+    
+    //A string that will store each line we read from the input file
+    char line [MAXLEN];
+    
+    //Get each line of the MAL program and process them until we reach the end
+    while (fgets(line, MAXLEN, infile) != NULL) {
+        
     }
     
     //Now that we are done, we can close both files
