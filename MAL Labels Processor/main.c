@@ -14,6 +14,11 @@ used as variables, a list of labels of the MAL program used for flow control, or
 //  Lab Instructor: Areeb Khan
 //  Lab: Friday @ 1:40PM - 2:35PM
 
+//  Lance Ackerson
+//  Unix Login ID: LA444978
+//  Lab Instructor:
+//  Lab: Wednesday 4:15
+
 #include <stdio.h>
 #include <string.h>
 
@@ -28,6 +33,21 @@ int flagb (char inputFile[], char outputFile[]);
 #define NUMARG 4
 
 #define MAXLEN 80
+
+/* We use two structs, node is a linked list, id simply holds the identifier
+ and points to a node*/
+struct node {
+    char text [255];
+    struct node *next;
+};
+
+struct id {
+    char identifier [11];
+    struct node *next;
+};
+
+struct id flow[100];
+int flowCount = 0;
 
 int main(int argc, const char * argv[]) {
     //Check for if the correct number of arguments were inputted
@@ -47,15 +67,12 @@ int main(int argc, const char * argv[]) {
     
     //Check flag inputted
     if (strcmp(flag, "-v") == 0){
-        printf("The flag is -v\n");
         flagv(inputFile,outputFile);
     }
     else if (strcmp(flag, "-f") == 0){
-        printf("The flag is -f\n");
         flagf(inputFile,outputFile);
     }
     else if (strcmp(flag, "-b") == 0){
-        printf("The flag is -b\n");
         flagb(inputFile,outputFile);
     }
     else{
@@ -126,9 +143,44 @@ int flagf (char inputFile[], char outputFile[]){
     //A string that will store each line we read from the input file
     char line [MAXLEN];
     
+    //Indicator of if we have passed the .data section and reached the .text section
+    int passedData = 0;
+    
     //Get each line of the MAL program and process them until we reach the end
     while (fgets(line, MAXLEN, infile) != NULL) {
+        //Skip comments and whitespace lines
+        if (line[0] == '#' || line [0] == '\n'){
+            continue;
+        }
+        //This is to check if the current line contains .text, if it does, we have passed the data section
+        char *check = strstr(line, ".text");
+        if (check){
+            passedData = 1;
+        }
+        if (passedData == 0){
+            continue;
+        }
         
+        /*For all lines past the .data section we check for : , if found we know all previous
+        text is our identifier so we copy it over to our array of identifiers*/
+        long len = strlen(line);
+        int i;
+        for (i=0; i<len; i++){
+            if (line[i] == ':'){
+                strncpy(flow[flowCount].identifier, line, i);
+                flowCount++;
+                break;
+            }
+        }
+    }
+    
+    //Now we input all of our identifiers and their mentioned lines into our output file
+    int i = 0;
+    for (i=0; i<flowCount; i++){
+        char tagged [100] = "Flow Control ID –";
+        strcat(tagged,flow[i].identifier);
+        strcat(tagged, "–\n");
+        fputs(tagged, outfile);
     }
     
     //Now that we are done, we can close both files
