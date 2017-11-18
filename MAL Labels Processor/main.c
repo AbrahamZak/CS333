@@ -20,6 +20,7 @@ used as variables, a list of labels of the MAL program used for flow control, or
 //  Lab: Wednesday 4:15
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 //All of our functions
@@ -37,13 +38,13 @@ int flagb (char inputFile[], char outputFile[]);
 /* We use two structs, node is a linked list, id simply holds the identifier
  and points to a node*/
 struct node {
-    char text [255];
+    char text [MAXLEN];
     struct node *next;
 };
 
 struct id {
     char identifier [11];
-    struct node *next;
+    struct node *head;
 };
 
 struct id flow[100];
@@ -146,7 +147,7 @@ int flagf (char inputFile[], char outputFile[]){
     //Indicator of if we have passed the .data section and reached the .text section
     int passedData = 0;
     
-    //Get each line of the MAL program and process them until we reach the end
+    //Get each line of the MAL program and process them until we reach the end and find all identifiers
     while (fgets(line, MAXLEN, infile) != NULL) {
         //Skip comments and whitespace lines
         if (line[0] == '#' || line [0] == '\n'){
@@ -174,13 +175,98 @@ int flagf (char inputFile[], char outputFile[]){
         }
     }
     
-    //Now we input all of our identifiers and their mentioned lines into our output file
+    /*This time we read each line of the file again for each identifier we previously found
+     as we cycle through the file each time we search for the identifier on a line and if found
+     we copy that line over to that identifier's next node pointer on the struct's linked list
+     */
+    //Marker for the first reference of any flow identifier in our program
+    int firstReference = 0;
     int i = 0;
     for (i=0; i<flowCount; i++){
+        //Go back to beginning of our input file
+        rewind(infile);
+        //Reset passedData
+        passedData = 0;
+        //Reset firstReference
+        firstReference = 0;
+        while (fgets(line, MAXLEN, infile) != NULL) {
+            //Skip comments and whitespace lines
+            if (line[0] == '#' || line [0] == '\n'){
+                continue;
+            }
+            
+            //Check if we've hit our first reference
+            if (passedData==1){
+                char *checking = strstr(line, ":");
+                if (checking){
+                    //Set our first reference variable to 1
+                    firstReference = 1;
+                }
+            }
+            
+            //Skip lines containing : because we are done with finding the identifiers
+            char *check = strstr(line, ":");
+            if (check){
+                continue;
+            }
+            //This is to check if the current line contains .text, if it does, we have passed the data section
+            char *checkData = strstr(line, ".text");
+            if (checkData){
+                passedData = 1;
+            }
+            if (passedData == 0){
+                continue;
+            }
+            
+            if (firstReference == 0){
+                continue;
+            }
+            //If we find a line in our input that contains the identifier, we copy that line to the
+            //identifiers linked list
+            char *foundID = strstr(line, flow[i].identifier);
+            if (foundID){
+                //create a node
+                struct node *add = (struct node*) malloc(sizeof(struct node));
+                strcpy(add->text, line);
+                add->next = NULL;
+                
+                //If there is no lines on the list yet, make this line the head
+                if (flow[i].head==NULL){
+                    flow[i].head = add;
+                }
+                else{
+                    struct node *current = flow[i].head;
+                    while (current->next!=NULL){
+                        current = current->next;
+                    }
+                    current->next=add;
+                }
+                
+                
+            }
+        }
+    }
+    
+    //Now we input all of our identifiers and their mentioned lines into our output file
+    i = 0;
+    for (i=0; i<flowCount; i++){
+        //Add "Flow Control ID -Identifier-" into the file
         char tagged [100] = "Flow Control ID –";
         strcat(tagged,flow[i].identifier);
         strcat(tagged, "–\n");
         fputs(tagged, outfile);
+        
+        //Iterate through linked list for specific identifier and add lines to output file
+        if (flow[i].head==NULL){
+        }
+        else{
+            struct node *current = flow[i].head;
+            fputs(flow[i].head->text,outfile);
+            while (current->next!=NULL){
+                current = current->next;
+                fputs(current->text,outfile);
+            }
+        }
     }
     
     //Now that we are done, we can close both files
