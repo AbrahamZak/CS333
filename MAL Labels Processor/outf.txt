@@ -1,0 +1,5 @@
+Flow Control ID –main–
+Flow Control ID –yes_part–
+Flow Control ID –no_part–
+          blt      $4, $5, no_part  #If ascii code is < 48 or > 57
+          bgt      $4, $6, no_part  #it can't be a digit.

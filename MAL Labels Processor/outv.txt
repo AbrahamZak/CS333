@@ -1,0 +1,9 @@
+Variable ID –inchar–
+          la       $a0, inchar  #Buffer
+          lbu      $4, inchar   #Get the character into $4.
+Variable ID –prompt–
+          la       $a0, prompt   #Start addr. of prompt string.
+Variable ID –yes_str–
+          la       $a0, yes_str
+Variable ID –no_str–
+          la       $a0, no_str
