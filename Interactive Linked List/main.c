@@ -297,6 +297,20 @@ int del (int num){
     else{
         //Traverse the list to reach the element before our index
         struct node *preptr = head;
+        //Special case for deleting element 1
+        if (num==1){
+            if (preptr->next==NULL){
+                preptr=NULL;
+                size--;
+                return 0;
+            }
+            else{
+                head = preptr->next;
+                size--;
+                reorder();
+                return 0;
+            }
+        }
         int i=1;
         while (i<num-1){
             preptr = preptr->next;
@@ -308,13 +322,16 @@ int del (int num){
             //Delete the element by setting the pre->next to the post
             preptr->next = postptr;
         }
+        
         //If there is no element after the index, we set preptr->next to NULL
+        else{
         preptr->next = NULL;
+        }
         
         //Decrement size
         size--;
         
-        //Reorder our index numbers across the list
+        //Fix order of our list
         reorder();
         
         printf("Deleted\n");
@@ -353,15 +370,14 @@ int prn (){
         printf("The list is empty\n");
         fflush(stdout);
     }
-    
+    else{
     struct node *ptr = head;
-    int i = 1;
     //start from the beginning and traverse the list unril reaching hitting a NULL node (the end)
-    while(i!=size+1) {
+    while(ptr!=NULL) {
         printf("%d: %s\n",ptr->index,ptr->text);
         fflush(stdout);
         ptr = ptr->next;
-        i++;
+    }
     }
     return 0;
 }
@@ -374,6 +390,9 @@ int reorder(){
     while(i!=size+1) {
         ptr->index = i;
         i++;
+        if (ptr->next==NULL){
+            break;
+        }
         ptr = ptr->next;
     }
     return 0;
